@@ -11,6 +11,7 @@ dependencies = [
     "datasketch>=2.0.0",
     "fastapi>=0.143.2",
     "httpx>=0.28.1",
+    "numpy>=2.3.5",
     "pandas>=3.0.6",
     "pydantic>=2.14.1",
     "uvicorn>=0.54.0",
@@ -37,5 +38,17 @@ build-backend = "uv_build"
 [dependency-groups]
 dev = [
     "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
     "ruff>=0.17.1",
 ]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["scripts"]
+
+[tool.coverage.run]
+source = ["fineprint", "securities_master"]
+
+[tool.coverage.report]
+fail_under = 90
+show_missing = true

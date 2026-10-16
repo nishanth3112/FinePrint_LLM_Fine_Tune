@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "source_url": "https://www.sec.gov/search-filings/standard-industrial-classification-sic-code-list",
+  "verified_on": "2026-10-15",
+  "note": "Approximation. SIC is coarse: one code can mix gambling and non-gambling firms, and 2080 covers all beverages. Every code below appears in SEC's official SIC list; titles are copied from it.",
+  "themes": {
+    "tobacco": [
+      {"code": "2100", "title": "TOBACCO PRODUCTS"},
+      {"code": "2111", "title": "CIGARETTES"}
+    ],
+    "weapons": [
+      {"code": "3480", "title": "ORDNANCE & ACCESSORIES, (NO VEHICLES/GUIDED MISSILES)"},
+      {"code": "3760", "title": "GUIDED MISSILES & SPACE VEHICLES & PARTS"}
+    ],
+    "fossil_fuels": [
+      {"code": "1220", "title": "BITUMINOUS COAL & LIGNITE MINING"},
+      {"code": "1221", "title": "BITUMINOUS COAL & LIGNITE SURFACE MINING"},
+      {"code": "1311", "title": "CRUDE PETROLEUM & NATURAL GAS"},
+      {"code": "1381", "title": "DRILLING OIL & GAS WELLS"},
+      {"code": "1382", "title": "OIL & GAS FIELD EXPLORATION SERVICES"},
+      {"code": "1389", "title": "OIL & GAS FIELD SERVICES, NEC"},
+      {"code": "2911", "title": "PETROLEUM REFINING"},
+      {"code": "4610", "title": "PIPE LINES (NO NATURAL GAS)"},
+      {"code": "4922", "title": "NATURAL GAS TRANSMISSION"},
+      {"code": "4923", "title": "NATURAL GAS TRANSMISISON & DISTRIBUTION"},
+      {"code": "5171", "title": "WHOLESALE-PETROLEUM BULK STATIONS & TERMINALS"},
+      {"code": "5172", "title": "WHOLESALE-PETROLEUM & PETROLEUM PRODUCTS (NO BULK STATIONS)"}
+    ],
+    "alcohol": [
+      {"code": "2080", "title": "BEVERAGES"},
+      {"code": "2082", "title": "MALT BEVERAGES"},
+      {"code": "5180", "title": "WHOLESALE-BEER, WINE & DISTILLED ALCOHOLIC BEVERAGES"}
+    ],
+    "gambling": [
+      {"code": "7948", "title": "SERVICES-RACING, INCLUDING TRACK OPERATION"},
+      {"code": "7990", "title": "SERVICES-MISCELLANEOUS AMUSEMENT & RECREATION"}
+    ]
+  }
+}
