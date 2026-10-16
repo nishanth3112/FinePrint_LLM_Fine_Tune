@@ -1,0 +1,41 @@
+[project]
+name = "fineprint"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Nishanth Manoharan", email = "manoharan.ni@northeastern.edu" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "datasketch>=2.0.0",
+    "fastapi>=0.143.2",
+    "httpx>=0.28.1",
+    "pandas>=3.0.6",
+    "pydantic>=2.14.1",
+    "uvicorn>=0.54.0",
+]
+
+[project.scripts]
+fineprint = "fineprint:main"
+
+[project.optional-dependencies]
+train = [
+    "datasets>=4.8.5",
+    "peft>=0.21.2",
+    "trl>=1.15.0",
+    "unsloth>=2026.10.6 ; sys_platform == 'linux'",
+]
+serve = [
+    "vllm>=0.22.1 ; sys_platform == 'linux'",
+]
+
+[build-system]
+requires = ["uv_build>=0.13.1,<0.14.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "ruff>=0.17.1",
+]
