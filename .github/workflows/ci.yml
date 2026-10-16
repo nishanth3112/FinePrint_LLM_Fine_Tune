@@ -1,0 +1,86 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - name: Lockfile is in sync with pyproject
+        run: uv lock --check
+      - run: uv sync --frozen
+      - run: uv run ruff check .
+
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      # No extras: train/serve deps need a GPU box and are not exercised here.
+      - run: uv sync --frozen
+      - name: Unit tests with coverage floor (see [tool.coverage.report])
+        run: uv run pytest --cov --cov-report=term-missing
+
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - run: uv build
+
+  data-guard:
+    name: data-guard
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      # CLAUDE.md: data/gold and data/test are read-only. Adding files is allowed (first
+      # generation of the splits); modifying, renaming or deleting existing ones is not.
+      - name: Gold and test data are append-only
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          changed=$(git diff --name-status --diff-filter=MDR "$BASE_SHA"...HEAD -- data/gold data/test | grep -v '\.gitkeep$' || true)
+          if [ -n "$changed" ]; then
+            echo "$changed"
+            echo "::error::data/gold and data/test are read-only; only new files may be added."
+            exit 1
+          fi
+
+  # Single required check for branch protection: fails if any job failed or was cancelled.
+  ci-success:
+    name: ci-success
+    if: always()
+    needs: [lint, test, build, data-guard]
+    runs-on: ubuntu-latest
+    steps:
+      - name: All required jobs passed
+        run: |
+          if [ "${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}" = "true" ]; then
+            echo "::error::A required job failed or was cancelled."
+            exit 1
+          fi
