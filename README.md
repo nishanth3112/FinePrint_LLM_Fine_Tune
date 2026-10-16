@@ -27,6 +27,25 @@ uv run python scripts/securities_master.py --contact-email you@example.com
 
 SEC requires a contact email in the User-Agent, so the script refuses to run without one.
 
+## CI
+
+Every PR into `main` must pass `ci-success`, which aggregates:
+
+| Job | What it enforces |
+|---|---|
+| `lint` | `uv lock --check` (lockfile in sync) and `ruff check` |
+| `test` | `pytest` with a 90% coverage floor |
+| `build` | `uv build` produces an sdist and wheel |
+| `data-guard` | existing files in `data/gold` and `data/test` are never modified, renamed or deleted (new files are fine) |
+
+Run the same checks locally:
+
+```
+uv lock --check && uv run ruff check . && uv run pytest --cov && uv build
+```
+
+Training and serving extras are not installed in CI; they need a GPU machine.
+
 ## Known limitations
 
 - **Fund and ETF look-through is deferred.** Exclusions and sector caps only see operating
